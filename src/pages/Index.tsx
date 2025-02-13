@@ -25,7 +25,7 @@ const Index = () => {
     } catch (error) {
       toast({
         title: "Invalid Input",
-        description: "Please check your score format (use percentages or fractions)",
+        description: "Please check your score format (use percentages or fractions e.g., 75% or 15/20)",
         variant: "destructive",
       });
     }
@@ -40,7 +40,7 @@ const Index = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="text-center space-y-4 animate-fade-in">
           <h1 className="text-4xl font-bold tracking-tight">
-            Grade Ninja Calculator
+            Grade Calculator
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Calculate your course grades and determine what you need on your final

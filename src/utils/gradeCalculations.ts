@@ -12,7 +12,11 @@ export const parseScore = (score: string): number => {
   
   // Handle fraction format (e.g., "15/20")
   if (score.includes("/")) {
-    const [numerator, denominator] = score.split("/").map(Number);
+    const parts = score.split("/");
+    if (parts.length !== 2) {
+      throw new Error("Invalid fraction format");
+    }
+    const [numerator, denominator] = parts.map(num => parseFloat(num.trim()));
     if (isNaN(numerator) || isNaN(denominator) || denominator === 0) {
       throw new Error("Invalid fraction format");
     }

@@ -58,7 +58,7 @@ export const CourseComponentsList: React.FC<CourseComponentsListProps> = ({
           Course Components
         </CardTitle>
         <CardDescription>
-          Add your course components and their weights below
+          Add your course components and their weights below. Toggle "Final Exam" to mark a component as your final exam - this will lock its score input and use it for calculating the required passing grade.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -101,7 +101,7 @@ export const CourseComponentsList: React.FC<CourseComponentsListProps> = ({
               </div>
               <div className="space-y-2">
                 <Label htmlFor={`score-${component.id}`}>
-                  Score (% or fraction)
+                  Score (75% or 15/20)
                 </Label>
                 <Input
                   id={`score-${component.id}`}
@@ -122,7 +122,12 @@ export const CourseComponentsList: React.FC<CourseComponentsListProps> = ({
                       updateComponent(component.id, { isFinal: checked })
                     }
                   />
-                  <Label>Final Exam</Label>
+                  <Label className="flex flex-col">
+                    <span>Final Exam</span>
+                    <span className="text-xs text-muted-foreground">
+                      Locks score input for final grade calculation
+                    </span>
+                  </Label>
                 </div>
                 <Button
                   variant="ghost"
