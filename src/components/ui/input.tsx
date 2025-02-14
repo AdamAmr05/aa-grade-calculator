@@ -3,18 +3,11 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, onChange, onKeyDown, ...props }, ref) => {
+  ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      // Allow the change to go through
+      // Always allow the input change to go through
       if (onChange) {
         onChange(e);
-      }
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      // Don't prevent any keystrokes - allow natural input behavior
-      if (onKeyDown) {
-        onKeyDown(e);
       }
     };
 
@@ -26,7 +19,6 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
           className
         )}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         ref={ref}
         {...props}
       />
