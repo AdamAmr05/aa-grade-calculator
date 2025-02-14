@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { CourseComponentsList } from "@/components/CourseComponentsList";
 import { FinalExamCalculator } from "@/components/FinalExamCalculator";
+import { LetterGradeGoals } from "@/components/LetterGradeGoals";
 import { useToast } from "@/components/ui/use-toast";
 import {
   CourseComponent,
@@ -10,10 +11,10 @@ import {
 
 const Index = () => {
   const [components, setComponents] = useState<CourseComponent[]>([]);
+  const [showLetterGrades, setShowLetterGrades] = useState(false);
   const { toast } = useToast();
 
   const handleComponentChange = (newComponents: CourseComponent[]) => {
-    // Remove validation check here to allow free editing
     setComponents(newComponents);
   };
 
@@ -43,6 +44,12 @@ const Index = () => {
           <FinalExamCalculator
             currentGrade={currentGrade}
             finalWeight={finalWeight}
+          />
+
+          <LetterGradeGoals
+            currentGrade={currentGrade}
+            enabled={showLetterGrades}
+            onToggle={setShowLetterGrades}
           />
         </div>
 
