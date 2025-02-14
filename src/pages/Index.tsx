@@ -6,7 +6,6 @@ import { useToast } from "@/components/ui/use-toast";
 import {
   CourseComponent,
   calculateOverallGrade,
-  parseScore,
 } from "@/utils/gradeCalculations";
 
 const Index = () => {
@@ -14,21 +13,8 @@ const Index = () => {
   const { toast } = useToast();
 
   const handleComponentChange = (newComponents: CourseComponent[]) => {
-    try {
-      // Validate scores
-      newComponents.forEach(comp => {
-        if (comp.score && !comp.isFinal) {
-          parseScore(comp.score);
-        }
-      });
-      setComponents(newComponents);
-    } catch (error) {
-      toast({
-        title: "Invalid Input",
-        description: "Please check your score format (use percentages or fractions e.g., 75% or 15/20)",
-        variant: "destructive",
-      });
-    }
+    // Remove validation check here to allow free editing
+    setComponents(newComponents);
   };
 
   const currentGrade = calculateOverallGrade(components);

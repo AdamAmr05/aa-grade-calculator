@@ -13,21 +13,23 @@ export const parseScore = (score: string): number => {
   // Handle fraction format (e.g., "15/20")
   if (score.includes("/")) {
     const parts = score.split("/");
-    if (parts.length !== 2) {
-      throw new Error("Invalid fraction format");
-    }
-    const [numerator, denominator] = parts.map(num => parseFloat(num.trim()));
-    if (isNaN(numerator) || isNaN(denominator) || denominator === 0) {
-      throw new Error("Invalid fraction format");
-    }
+    // Allow partial fractions during editing
+    if (parts.length === 1) return 0;
+    if (parts.length !== 2) return 0;
+    
+    const numerator = parseFloat(parts[0].trim());
+    const denominator = parseFloat(parts[1].trim());
+    
+    // During editing, one or both parts might be empty or invalid
+    if (isNaN(numerator) || isNaN(denominator)) return 0;
+    if (denominator === 0) return 0;
+    
     return (numerator / denominator) * 100;
   }
   
   // Handle percentage format (e.g., "75%" or "75")
   const percentage = parseFloat(score.replace("%", ""));
-  if (isNaN(percentage)) {
-    throw new Error("Invalid percentage format");
-  }
+  if (isNaN(percentage)) return 0;
   return percentage;
 };
 
