@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -35,8 +36,43 @@
 
 .card {
   padding: 2em;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* Enhanced animations */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+/* Smooth transitions */
+input, button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced focus states */
+input:focus, button:focus {
+  outline: none;
+  ring-offset: 2px;
+  ring-color: rgb(59 130 246 / 0.5);
+  ring-offset-color: white;
 }

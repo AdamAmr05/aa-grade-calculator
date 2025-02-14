@@ -36,13 +36,13 @@ const Index = () => {
   const finalWeight = finalExam?.weight || 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8 relative pb-16">
         <div className="text-center space-y-4 animate-fade-in">
-          <h1 className="text-4xl font-bold tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent">
             Grade Calculator
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Calculate your course grades and determine what you need on your final
             exam to pass
           </p>
@@ -58,6 +58,12 @@ const Index = () => {
             currentGrade={currentGrade}
             finalWeight={finalWeight}
           />
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 text-center py-4">
+          <p className="text-sm text-gray-500 font-light tracking-wide animate-fade-in">
+            Created by Adam
+          </p>
         </div>
       </div>
     </div>
