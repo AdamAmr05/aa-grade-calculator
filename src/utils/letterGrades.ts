@@ -23,6 +23,6 @@ export const calculatePointsNeeded = (currentGrade: number): { grade: string; po
     .filter(lg => lg.minimum > currentGrade)
     .map(lg => ({
       grade: lg.grade,
-      pointsNeeded: (lg.minimum - currentGrade).toFixed(1)
+      pointsNeeded: Number((lg.minimum - currentGrade).toFixed(1))
     }));
 };
