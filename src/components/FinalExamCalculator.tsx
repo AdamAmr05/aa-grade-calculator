@@ -27,6 +27,11 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
   const isPassing = currentGrade >= 50;
   const isImpossible = requiredScore > 100;
 
+  // Calculate progress towards the 50% goal
+  const progressPercentage = (currentGrade / 50) * 100;
+  const clampedProgress = Math.max(0, Math.min(progressPercentage, 100));
+  const percentageToGo = Math.max(0, 50 - currentGrade);
+
   return (
     <Card className="w-full max-w-2xl mx-auto backdrop-blur bg-white/80">
       <CardHeader>
@@ -58,9 +63,11 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Progress to Passing (50%)</span>
-            <span className="text-sm font-medium">{currentGrade.toFixed(1)}%</span>
+            <span className="text-sm font-medium">
+              {isPassing ? "Passed!" : `${percentageToGo.toFixed(1)}% to go`}
+            </span>
           </div>
-          <Progress value={Math.min(currentGrade, 100)} />
+          <Progress value={clampedProgress} />
         </div>
 
         <div className="p-6 rounded-lg bg-white/50 backdrop-blur border">
