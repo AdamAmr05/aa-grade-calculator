@@ -3,25 +3,12 @@ export interface LetterGrade {
   minScore: number;
 }
 
-export const letterGradeScale: LetterGrade[] = [
-  { grade: "A+", minScore: 94 },
-  { grade: "A", minScore: 90 },
-  { grade: "A-", minScore: 86 },
-  { grade: "B+", minScore: 82 },
-  { grade: "B", minScore: 78 },
-  { grade: "B-", minScore: 74 },
-  { grade: "C+", minScore: 70 },
-  { grade: "C", minScore: 65 },
-  { grade: "C-", minScore: 60 },
-  { grade: "D+", minScore: 55 },
-  { grade: "D", minScore: 50 },
-];
-
 export const calculateOverallPointsNeededForGrade = (
-  currentGrade: number
+  currentGrade: number,
+  scale: LetterGrade[]
 ): { grade: string; pointsNeeded: number; targetScore: number }[] => {
   const goals = [];
-  const sortedScale = [...letterGradeScale].sort((a, b) => b.minScore - a.minScore);
+  const sortedScale = [...scale].sort((a, b) => b.minScore - a.minScore);
 
   for (const { grade, minScore } of sortedScale) {
     if (minScore > currentGrade) {
@@ -38,8 +25,8 @@ export const calculateOverallPointsNeededForGrade = (
   return goals;
 };
 
-export const getLetterGrade = (score: number): string => {
-  const sortedScale = [...letterGradeScale].sort((a, b) => b.minScore - a.minScore);
+export const getLetterGrade = (score: number, scale: LetterGrade[]): string => {
+  const sortedScale = [...scale].sort((a, b) => b.minScore - a.minScore);
   for (const { grade, minScore } of sortedScale) {
     if (score >= minScore) {
       return grade;

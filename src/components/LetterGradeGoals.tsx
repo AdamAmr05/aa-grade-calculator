@@ -9,12 +9,14 @@ import { ChevronRight } from "lucide-react";
 import {
   calculateOverallPointsNeededForGrade,
   calculateRequiredFinalScoreForTarget,
+  LetterGrade,
 } from "@/utils/letterGrades";
 
 interface LetterGradeGoalsProps {
   currentGrade: number;
   currentGradeWithoutFinal: number;
   finalWeight: number;
+  gradingScale: LetterGrade[];
   enabled: boolean;
   onToggle: (enabled: boolean) => void;
 }
@@ -23,10 +25,11 @@ export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
   currentGrade,
   currentGradeWithoutFinal,
   finalWeight,
+  gradingScale,
   enabled,
   onToggle,
 }) => {
-  const goalsData = calculateOverallPointsNeededForGrade(currentGrade);
+  const goalsData = calculateOverallPointsNeededForGrade(currentGrade, gradingScale);
   const [expandedGrade, setExpandedGrade] = useState<string | null>(null);
 
   return (

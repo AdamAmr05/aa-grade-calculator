@@ -9,15 +9,18 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { getLetterGrade } from "@/utils/letterGrades";
+import { LetterGrade } from "@/utils/letterGrades";
 
 interface FinalExamCalculatorProps {
   currentGrade: number;
   finalWeight: number;
+  gradingScale: LetterGrade[];
 }
 
 export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
   currentGrade,
   finalWeight,
+  gradingScale,
 }) => {
   const requiredScore =
     finalWeight === 0
@@ -50,7 +53,7 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
             <p className="text-4xl font-bold">
               {currentGrade.toFixed(1)}%
               <span className="text-2xl font-semibold text-muted-foreground ml-2">
-                ({getLetterGrade(currentGrade)})
+                ({getLetterGrade(currentGrade, gradingScale)})
               </span>
             </p>
           </div>
