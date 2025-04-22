@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Plus, Trash2, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,6 +47,15 @@ export const CourseComponentsList: React.FC<CourseComponentsListProps> = ({
     onComponentChange(components.filter((comp) => comp.id !== id));
   };
 
+  const handleWeightChange = (id: string, value: string) => {
+    const newWeight = value === "" ? 0 : parseFloat(value);
+    if (!isNaN(newWeight)) {
+      updateComponent(id, { weight: Math.max(0, Math.min(100, newWeight)) });
+    } else if (value === "") {
+      updateComponent(id, { weight: 0 });
+    }
+  };
+
   const totalWeight = components.reduce((sum, comp) => sum + comp.weight, 0);
 
   return (
@@ -88,14 +96,11 @@ export const CourseComponentsList: React.FC<CourseComponentsListProps> = ({
                 <Input
                   id={`weight-${component.id}`}
                   type="number"
-                  value={component.weight}
-                  onChange={(e) =>
-                    updateComponent(component.id, {
-                      weight: parseFloat(e.target.value) || 0,
-                    })
-                  }
+                  value={component.weight === 0 ? '' : component.weight.toString()}
+                  onChange={(e) => handleWeightChange(component.id, e.target.value)}
                   min="0"
                   max="100"
+                  placeholder="e.g., 20"
                   className="bg-white/50"
                 />
               </div>

@@ -31,22 +31,27 @@ export const GradeScaleEditor: React.FC<GradeScaleEditorProps> = ({
   const [editableScale, setEditableScale] = useState<LetterGrade[]>([]);
   const { toast } = useToast();
 
-  // Initialize editable scale when the dialog opens or currentScale changes
   useEffect(() => {
     if (isOpen) {
-      // Create a deep copy to avoid modifying the original state directly
-      setEditableScale(JSON.parse(JSON.stringify(currentScale)));
+      // Create a deep copy and sort it for initial display
+      const sortedInitialScale = [...currentScale].sort((a, b) => b.minScore - a.minScore);
+      setEditableScale(sortedInitialScale);
     }
   }, [isOpen, currentScale]);
 
   const handleInputChange = (grade: string, value: string) => {
-    const newScore = parseInt(value, 10);
-    // Basic validation: ensure it's a number
-    if (isNaN(newScore)) return;
+    // Allow empty string temporarily
+    const newScore = value === "" ? 0 : parseInt(value, 10);
+
+    // Prevent non-numeric input from causing NaN issues, but allow clearing
+    if (value !== "" && isNaN(newScore)) {
+      return; // Ignore if non-empty and not a valid number
+    }
 
     setEditableScale((prevScale) =>
       prevScale.map((item) =>
-        item.grade === grade ? { ...item, minScore: newScore } : item
+        // Update the score, allowing 0 for empty input temporarily
+        item.grade === grade ? { ...item, minScore: value === "" ? 0 : newScore } : item
       )
     );
   };
@@ -119,16 +124,17 @@ export const GradeScaleEditor: React.FC<GradeScaleEditorProps> = ({
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-4">
-          {/* Sort for consistent display order */}
-          {editableScale.sort((a, b) => b.minScore - a.minScore).map(({ grade, minScore }) => (
+          {/* Render based on the state, do not sort here */}
+          {editableScale.map(({ grade, minScore }, index) => (
             <div key={grade} className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor={`score-${grade}`} className="text-right">
                 {grade}
               </Label>
               <Input
                 id={`score-${grade}`}
-                type="number"
-                value={minScore}
+                type="number" // Keep type=number for browser controls
+                // Display 0 as empty string for better UX when cleared
+                value={minScore === 0 && editableScale[index]?.minScore === 0 ? '' : minScore.toString()} 
                 onChange={(e) => handleInputChange(grade, e.target.value)}
                 className="col-span-3"
                 min="0"
