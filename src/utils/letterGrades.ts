@@ -11,11 +11,10 @@ export const letterGradeScale: LetterGrade[] = [
   { grade: "B", minScore: 78 },
   { grade: "B-", minScore: 74 },
   { grade: "C+", minScore: 70 },
-  { grade: "C", minScore: 66 },
-  { grade: "C-", minScore: 62 },
-  { grade: "D+", minScore: 58 },
-  { grade: "D", minScore: 54 },
-  { grade: "D-", minScore: 50 },
+  { grade: "C", minScore: 65 },
+  { grade: "C-", minScore: 60 },
+  { grade: "D+", minScore: 55 },
+  { grade: "D", minScore: 50 },
   { grade: "F", minScore: 0 },
 ];
 
