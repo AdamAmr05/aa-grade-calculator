@@ -44,10 +44,10 @@ export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
           {goalsData.length > 0 ? (
             <ScrollArea className="h-[200px] w-full rounded-md border p-4">
               <div className="space-y-4">
-                {goalsData.map(({ grade, pointsNeeded: targetScore }) => {
-                  let displayText = `Reach ${targetScore}% overall`; // Default text
+                {goalsData.map(({ grade, pointsNeeded, targetScore }) => {
+                  let baseText = `Need ${pointsNeeded.toFixed(1)}% more`;
+                  let finalText = "";
 
-                  // If final exam weight exists, calculate needed score on final
                   if (finalWeight > 0) {
                     const requiredFinalScore = calculateRequiredFinalScoreForTarget(
                       currentGradeWithoutFinal,
@@ -56,10 +56,9 @@ export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
                     );
 
                     if (requiredFinalScore !== null) {
-                      displayText = `Need ${requiredFinalScore.toFixed(1)}% on Final`;
+                      finalText = ` (requires ${requiredFinalScore.toFixed(1)}% on final)`;
                     } else {
-                      // If target is impossible with the final exam
-                      displayText = `(Impossible with Final)`;
+                      finalText = ` (impossible with final)`;
                     }
                   }
 
@@ -70,10 +69,10 @@ export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
                     >
                       <div className="flex items-center space-x-2">
                         <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        <span className="font-medium">{grade} ({targetScore}%)</span> {/* Show target overall score */}
+                        <span className="font-medium">{grade} ({targetScore}%)</span>
                       </div>
                       <span className="text-sm text-muted-foreground">
-                        {displayText} {/* Display calculated text */}
+                        {baseText}{finalText}
                       </span>
                     </div>
                   );

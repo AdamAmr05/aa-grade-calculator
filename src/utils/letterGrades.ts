@@ -15,10 +15,11 @@ export const letterGradeScale: LetterGrade[] = [
   { grade: "C-", minScore: 60 },
   { grade: "D+", minScore: 55 },
   { grade: "D", minScore: 50 },
-  { grade: "F", minScore: 0 },
 ];
 
-export const calculateOverallPointsNeededForGrade = (currentGrade: number): { grade: string; pointsNeeded: number }[] => {
+export const calculateOverallPointsNeededForGrade = (
+  currentGrade: number
+): { grade: string; pointsNeeded: number; targetScore: number }[] => {
   const goals = [];
   const sortedScale = [...letterGradeScale].sort((a, b) => b.minScore - a.minScore);
 
@@ -28,12 +29,13 @@ export const calculateOverallPointsNeededForGrade = (currentGrade: number): { gr
       if (pointsNeeded > 0) {
         goals.push({
           grade: grade,
-          pointsNeeded: minScore,
+          pointsNeeded: pointsNeeded,
+          targetScore: minScore,
         });
       }
     }
   }
-  return goals.sort((a, b) => a.pointsNeeded - b.pointsNeeded);
+  return goals;
 };
 
 export const getLetterGrade = (score: number): string => {
