@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { CourseComponentsList } from "@/components/CourseComponentsList";
 import { FinalExamCalculator } from "@/components/FinalExamCalculator";
@@ -48,6 +47,8 @@ const Index = () => {
 
           <LetterGradeGoals
             currentGrade={currentGrade}
+            currentGradeWithoutFinal={currentGrade}
+            finalWeight={finalWeight}
             enabled={showLetterGrades}
             onToggle={setShowLetterGrades}
           />

@@ -1,24 +1,30 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { calculatePointsNeeded } from "@/utils/letterGrades";
+import {
+  calculateOverallPointsNeededForGrade,
+  calculateRequiredFinalScoreForTarget,
+} from "@/utils/letterGrades";
 import { ChevronRight } from "lucide-react";
 
 interface LetterGradeGoalsProps {
   currentGrade: number;
+  currentGradeWithoutFinal: number;
+  finalWeight: number;
   enabled: boolean;
   onToggle: (enabled: boolean) => void;
 }
 
 export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
   currentGrade,
+  currentGradeWithoutFinal,
+  finalWeight,
   enabled,
   onToggle,
 }) => {
-  const pointsNeeded = calculatePointsNeeded(currentGrade);
+  const goalsData = calculateOverallPointsNeededForGrade(currentGrade);
 
   return (
     <Card className="w-full max-w-2xl mx-auto backdrop-blur bg-white/80">
@@ -35,23 +41,43 @@ export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
       </CardHeader>
       {enabled && (
         <CardContent>
-          {pointsNeeded.length > 0 ? (
+          {goalsData.length > 0 ? (
             <ScrollArea className="h-[200px] w-full rounded-md border p-4">
               <div className="space-y-4">
-                {pointsNeeded.map(({ grade, pointsNeeded }) => (
-                  <div
-                    key={grade}
-                    className="flex items-center justify-between p-2 rounded-lg bg-white/50 backdrop-blur border"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                      <span className="font-medium">{grade}</span>
+                {goalsData.map(({ grade, pointsNeeded: targetScore }) => {
+                  let displayText = `Reach ${targetScore}% overall`; // Default text
+
+                  // If final exam weight exists, calculate needed score on final
+                  if (finalWeight > 0) {
+                    const requiredFinalScore = calculateRequiredFinalScoreForTarget(
+                      currentGradeWithoutFinal,
+                      finalWeight,
+                      targetScore
+                    );
+
+                    if (requiredFinalScore !== null) {
+                      displayText = `Need ${requiredFinalScore.toFixed(1)}% on Final`;
+                    } else {
+                      // If target is impossible with the final exam
+                      displayText = `(Impossible with Final)`;
+                    }
+                  }
+
+                  return (
+                    <div
+                      key={grade}
+                      className="flex items-center justify-between p-2 rounded-lg bg-white/50 backdrop-blur border"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        <span className="font-medium">{grade} ({targetScore}%)</span> {/* Show target overall score */}
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        {displayText} {/* Display calculated text */}
+                      </span>
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      Need {pointsNeeded}% more
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </ScrollArea>
           ) : (

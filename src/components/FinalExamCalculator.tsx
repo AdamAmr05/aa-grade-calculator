@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Calculator, ArrowRight } from "lucide-react";
 import {
@@ -9,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { getLetterGrade } from "@/utils/letterGrades";
 
 interface FinalExamCalculatorProps {
   currentGrade: number;
@@ -42,7 +42,12 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
         <div className="grid gap-4 md:grid-cols-2">
           <div className="p-4 rounded-lg bg-white/50 backdrop-blur border">
             <p className="text-sm font-medium mb-2">Current Grade</p>
-            <p className="text-2xl font-bold">{currentGrade.toFixed(1)}%</p>
+            <p className="text-4xl font-bold">
+              {currentGrade.toFixed(1)}%
+              <span className="text-2xl font-semibold text-muted-foreground ml-2">
+                ({getLetterGrade(currentGrade)})
+              </span>
+            </p>
           </div>
           <div className="p-4 rounded-lg bg-white/50 backdrop-blur border">
             <p className="text-sm font-medium mb-2">Final Exam Weight</p>
