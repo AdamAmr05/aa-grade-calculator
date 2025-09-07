@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Calculator, ArrowRight } from "lucide-react";
 import {
   Card,
@@ -8,6 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getLetterGrade } from "@/utils/letterGrades";
 import { LetterGrade } from "@/utils/letterGrades";
 
@@ -22,10 +24,20 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
   finalWeight,
   gradingScale,
 }) => {
+  const [targetType, setTargetType] = useState<"pass" | "letter">("pass");
+  const [whatIfFinal, setWhatIfFinal] = useState<number>(Math.min(100, Math.max(0, 80)));
+  const [targetLetter, setTargetLetter] = useState<string>("B");
+
+  const targetOverall = useMemo(() => {
+    if (targetType === "pass") return 50;
+    const match = gradingScale.find(g => g.grade === targetLetter);
+    return match ? match.minScore : 50;
+  }, [targetType, targetLetter, gradingScale]);
+
   const requiredScore =
     finalWeight === 0
       ? 0
-      : ((50 - currentGrade) / (finalWeight / 100));
+      : ((targetOverall - currentGrade) / (finalWeight / 100));
   
   const isPassing = currentGrade >= 50;
   const isImpossible = requiredScore > 100;
@@ -35,6 +47,10 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
   const clampedProgress = Math.max(0, Math.min(progressPercentage, 100));
   const percentageToGo = Math.max(0, 50 - currentGrade);
 
+  const projectedOverall = useMemo(() => {
+    return currentGrade + (finalWeight / 100) * whatIfFinal;
+  }, [currentGrade, finalWeight, whatIfFinal]);
+
   return (
     <Card className="w-full max-w-2xl mx-auto backdrop-blur bg-white/80">
       <CardHeader>
@@ -43,10 +59,40 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
           Final Exam Calculator
         </CardTitle>
         <CardDescription>
-          Calculate the score needed on your final exam to pass
+          Calculate the score needed on your final exam to reach a goal
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Target</p>
+            <div className="flex gap-2">
+              <Select value={targetType} onValueChange={(v) => setTargetType(v as any)}>
+                <SelectTrigger className="w-28"><SelectValue placeholder="Target" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pass">Pass (50%)</SelectItem>
+                  <SelectItem value="letter">Letter</SelectItem>
+                </SelectContent>
+              </Select>
+              {targetType === "letter" && (
+                <Select value={targetLetter} onValueChange={setTargetLetter}>
+                  <SelectTrigger className="w-24"><SelectValue placeholder="Grade" /></SelectTrigger>
+                  <SelectContent>
+                    {gradingScale.sort((a,b)=>b.minScore-a.minScore).map(g => (
+                      <SelectItem key={g.grade} value={g.grade}>{g.grade} ({g.minScore}%)</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm font-medium">What-if Final Score</p>
+            <Slider value={[whatIfFinal]} min={0} max={100} step={1} onValueChange={(v) => setWhatIfFinal(v[0])} />
+            <div className="text-sm text-muted-foreground">{whatIfFinal}% → Projected Overall: <span className="font-medium">{projectedOverall.toFixed(1)}%</span> ({getLetterGrade(projectedOverall, gradingScale)})</div>
+          </div>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2">
           <div className="p-4 rounded-lg bg-white/50 backdrop-blur border">
             <p className="text-sm font-medium mb-2">Current Grade</p>
@@ -101,8 +147,7 @@ export const FinalExamCalculator: React.FC<FinalExamCalculatorProps> = ({
                 <div className="text-lg">Needed on Final</div>
               </div>
               <p className="text-sm text-muted-foreground">
-                You need to score at least {requiredScore.toFixed(1)}% on your
-                final exam to pass the course
+                You need at least {requiredScore.toFixed(1)}% on your final to reach {targetType === "pass" ? "50% (pass)" : `${targetLetter}`}
               </p>
             </div>
           )}
