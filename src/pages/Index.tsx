@@ -19,8 +19,19 @@ const defaultGradeScale: LetterGrade[] = [
 ];
 
 const Index = () => {
-  const [components, setComponents] = useState<CourseComponent[]>([]);
+  // Load components from localStorage on mount
+  const [components, setComponents] = useState<CourseComponent[]>(() => {
+    try {
+      const savedComponents = localStorage.getItem("courseComponents");
+      return savedComponents ? JSON.parse(savedComponents) : [];
+    } catch (error) {
+      console.error("Error loading components from localStorage:", error);
+      return [];
+    }
+  });
+  
   const [showLetterGrades, setShowLetterGrades] = useState(false);
+  
   // State for the grading scale
   const [gradingScale, setGradingScale] = useState<LetterGrade[]>(() => {
     try {
@@ -32,6 +43,15 @@ const Index = () => {
     }
   });
   const { toast } = useToast();
+
+  // Save components to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem("courseComponents", JSON.stringify(components));
+    } catch (error) {
+      console.error("Error saving components to localStorage:", error);
+    }
+  }, [components]);
 
   // Effect to save scale to localStorage when it changes
   useEffect(() => {
