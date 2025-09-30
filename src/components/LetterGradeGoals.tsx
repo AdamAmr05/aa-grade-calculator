@@ -34,15 +34,15 @@ export const LetterGradeGoals: React.FC<LetterGradeGoalsProps> = ({
 
   return (
     <Card className="w-full max-w-2xl mx-auto backdrop-blur bg-white/80">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 py-4">
         <CardTitle className="text-xl font-semibold">Letter Grade Goals</CardTitle>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-3">
+          <Label htmlFor="letter-grades" className="cursor-pointer text-sm">Show Goals</Label>
           <Switch
             id="letter-grades"
             checked={enabled}
             onCheckedChange={onToggle}
           />
-          <Label htmlFor="letter-grades">Show Goals</Label>
         </div>
       </CardHeader>
       {enabled && (

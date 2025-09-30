@@ -126,8 +126,8 @@ export const GradeScaleEditor: React.FC<GradeScaleEditorProps> = ({
         <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-4">
           {/* Render based on the state, do not sort here */}
           {editableScale.map(({ grade, minScore }, index) => (
-            <div key={grade} className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor={`score-${grade}`} className="text-right">
+            <div key={grade} className="flex items-center gap-3">
+              <Label htmlFor={`score-${grade}`} className="text-right w-10 shrink-0 whitespace-nowrap font-medium">
                 {grade}
               </Label>
               <Input
@@ -136,7 +136,7 @@ export const GradeScaleEditor: React.FC<GradeScaleEditorProps> = ({
                 // Display 0 as empty string for better UX when cleared
                 value={minScore === 0 && editableScale[index]?.minScore === 0 ? '' : minScore.toString()} 
                 onChange={(e) => handleInputChange(grade, e.target.value)}
-                className="col-span-3"
+                className="flex-1"
                 min="0"
                 max="100"
               />
