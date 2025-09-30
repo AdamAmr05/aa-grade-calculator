@@ -125,23 +125,34 @@ export const GradeScaleEditor: React.FC<GradeScaleEditorProps> = ({
         </DialogHeader>
         <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-4">
           {/* Render based on the state, do not sort here */}
-          {editableScale.map(({ grade, minScore }, index) => (
-            <div key={grade} className="flex items-center gap-3">
-              <Label htmlFor={`score-${grade}`} className="text-right w-10 shrink-0 whitespace-nowrap font-medium">
-                {grade}
-              </Label>
-              <Input
-                id={`score-${grade}`}
-                type="number" // Keep type=number for browser controls
-                // Display 0 as empty string for better UX when cleared
-                value={minScore === 0 && editableScale[index]?.minScore === 0 ? '' : minScore.toString()} 
-                onChange={(e) => handleInputChange(grade, e.target.value)}
-                className="flex-1"
-                min="0"
-                max="100"
-              />
-            </div>
-          ))}
+          {editableScale.map(({ grade, minScore }, index) => {
+            const baseGrade = grade.charAt(0);
+            const modifier = grade.slice(1);
+
+            return (
+              <div key={grade} className="flex items-center gap-3">
+                <Label
+                  htmlFor={`score-${grade}`}
+                  className="relative inline-flex w-12 shrink-0 items-center justify-end whitespace-nowrap"
+                >
+                  <span className="w-full pr-2 text-right">{baseGrade}</span>
+                  {modifier && (
+                    <span className="absolute right-0 text-right">{modifier}</span>
+                  )}
+                </Label>
+                <Input
+                  id={`score-${grade}`}
+                  type="number" // Keep type=number for browser controls
+                  // Display 0 as empty string for better UX when cleared
+                  value={minScore === 0 && editableScale[index]?.minScore === 0 ? '' : minScore.toString()}
+                  onChange={(e) => handleInputChange(grade, e.target.value)}
+                  className="flex-1"
+                  min="0"
+                  max="100"
+                />
+              </div>
+            );
+          })}
         </div>
         <DialogFooter>
           <DialogClose asChild>
