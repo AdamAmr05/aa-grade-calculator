@@ -8,16 +8,6 @@
     <meta name="author" content="Adam" />
     <meta property="og:image" content="/og-image.png" />
     <link rel="icon" href="data:,">
-    <script>
-      // GitHub Pages SPA redirect handler
-      (function() {
-        const redirect = new URLSearchParams(window.location.search).get('redirect');
-        if (redirect) {
-          const newUrl = window.location.pathname + '#/' + redirect + window.location.search.replace('?redirect=' + redirect, '').replace(/^&/, '?') + window.location.hash.slice(1);
-          window.history.replaceState(null, null, newUrl);
-        }
-      })();
-    </script>
   </head>
 
   <body>
